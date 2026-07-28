@@ -176,6 +176,8 @@ const url = supabaseClient
 
 
 gallery.innerHTML += `
+<div>
+
 <img 
 src="${url}" 
 style="
@@ -184,6 +186,16 @@ border-radius:20px;
 box-shadow:0 3px 10px #ddd;
 "
 />
+
+<br>
+
+<a href="${url}" download>
+<button style="margin-top:10px;">
+⬇️ Pobierz zdjęcie
+</button>
+</a>
+
+</div>
 `;
 
 });
