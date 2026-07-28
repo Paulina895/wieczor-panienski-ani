@@ -1,164 +1,142 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Wieczór Panieński Ani 💕</title>
+<title>Wieczór Panieński Ani 💗</title>
 
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #ffe6ef, #fff7fa);
-      color: #7a3b52;
-      text-align: center;
-      padding: 40px 20px;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: white;
-      padding: 35px 25px;
-      border-radius: 30px;
-      box-shadow: 0 10px 30px rgba(180, 90, 120, 0.15);
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff0f6;
+  color: #555;
+  text-align: center;
+}
 
-    h1 {
-      font-size: 38px;
-      margin-bottom: 10px;
-      color: #d85d8b;
-    }
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 25px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
 
-    .heart {
-      font-size: 45px;
-    }
+h1 {
+  color: #d63384;
+  font-size: 38px;
+}
 
-    p {
-      font-size: 18px;
-      line-height: 1.5;
-    }
+h2 {
+  color: #d63384;
+}
 
-    button {
-      margin-top: 25px;
-      background: #e88aaa;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 50px;
-      font-size: 18px;
-      cursor: pointer;
-    }
+button {
+  background: #d63384;
+  color: white;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    button:hover {
-      background: #d85d8b;
-    }
+input {
+  margin: 15px;
+}
+</style>
 
-    .gallery {
-      margin-top: 40px;
-      padding: 20px;
-      border-radius: 20px;
-      background: #fff0f5;
-    }
-  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="heart">💕</div>
+<h1>Wieczór Panieński Ani 💗</h1>
 
-  <h1>Wieczór Panieński Ani</h1>
+<p>
+Razem tworzymy piękne wspomnienia 🌸
+</p>
 
-  <p>
-    Zostaw tutaj swoje zdjęcia i filmiki,
-    żebyśmy mogły zachować wszystkie piękne chwile ✨
-  </p>
+<h2>📸 Dodaj zdjęcia i filmiki</h2>
 
-  <button>
-    📸 Dodaj zdjęcia
-  </button>
+<input 
+type="file" 
+id="fileInput"
+accept="image/*,video/*"
+multiple
+>
 
-  <div class="gallery">
-    <h2>Nasze wspomnienia 🌸</h2>
-    <p>
-      Galeria pojawi się tutaj już niedługo 💗
-    </p>
-  </div>
+<br>
+
+<button onclick="uploadFiles()">
+💗 Dodaj do albumu
+</button>
+
+<p id="status"></p>
 
 </div>
-<!-- ALBUM ANI -->
-<div style="margin-top:40px; text-align:center; background:#fff0f6; padding:25px; border-radius:20px;">
-  <h2 style="color:#d63384;">📸 Dodaj zdjęcia i filmiki</h2>
-  <p style="color:#777;">Podziel się wspomnieniami z wieczoru Ani 💕</p>
 
-  <input 
-    type="file" 
-    id="fileInput" 
-    accept="image/*,video/*" 
-    multiple
-  >
-
-  <br><br>
-
-  <button 
-    onclick="uploadFiles()"
-    style="
-      background:#d63384;
-      color:white;
-      border:none;
-      padding:12px 25px;
-      border-radius:25px;
-      font-size:16px;
-      cursor:pointer;
-    "
-  >
-    💗 Dodaj do albumu
-  </button>
-
-  <p id="status"></p>
-</div>
 
 <script>
-<script>
-<script>
+
 const supabaseClient = supabase.createClient(
-  "TUTAJ_WKLEIMY_API_URL",
-  "TUTAJ_WKLEIMY_ANON_KEY"
+  "https://vhamqmqomwfmbetsgunr.supabase.co/rest/v1/",
+  "sb_publishable_hp8Rd_IpzsqfFLfZbndayg_obgR8Bgu"
 );
 
+
 async function uploadFiles() {
-  const files = document.getElementById('fileInput').files;
-  const status = document.getElementById('status');
 
-  if (!files.length) {
-    status.innerHTML = "Wybierz najpierw zdjęcia 💕";
-    return;
-  }
+const files = document.getElementById("fileInput").files;
+const status = document.getElementById("status");
 
-  status.innerHTML = "Dodaję zdjęcia... 🌸";
 
-  for (const file of files) {
-    const fileName = Date.now() + "-" + file.name;
+if (!files.length) {
+status.innerHTML = "Najpierw wybierz zdjęcia 💕";
+return;
+}
 
-    const { error } = await supabaseClient.storage
-      .from("zdjecia-ani")
-      .upload(fileName, file);
 
-    if (error) {
-      console.log(error);
-      status.innerHTML = "Ups, coś nie wyszło 😢";
-      return;
-    }
-  }
+status.innerHTML = "Wysyłam zdjęcia... 🌸";
 
-  status.innerHTML = "Gotowe! Zdjęcia są w albumie Ani 💗";
+
+for (const file of files) {
+
+
+const fileName = Date.now() + "-" + file.name;
+
+
+const { error } = await supabaseClient
+.storage
+.from("zdjecia-ani")
+.upload(fileName, file);
+
+
+if (error) {
+
+console.log(error);
+
+status.innerHTML = "Coś poszło nie tak 😢";
+
+return;
+
+}
+
+}
+
+
+status.innerHTML = "Gotowe! Zdjęcia Ani są zapisane 💗";
+
+
 }
 
 </script>
+
+
 </body>
 </html>
