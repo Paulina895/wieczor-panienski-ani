@@ -144,7 +144,9 @@ status.innerHTML = "Gotowe! Zdjęcia Ani są zapisane 💗";
 
 }
 async function loadGallery() {
-
+  
+console.log("Galeria startuje");
+  
 const gallery = document.getElementById("gallery");
 
 const { data, error } = await supabaseClient
