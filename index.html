@@ -153,6 +153,9 @@ const { data, error } = await supabaseClient
 .storage
 .from("zdjecia-ani")
 .list();
+  
+console.log("Pliki z Supabase:", data);
+console.log("Błąd:", error);
 
 
 if (error) {
