@@ -90,6 +90,64 @@
   </div>
 
 </div>
+<!-- ALBUM ANI -->
+<div style="margin-top:40px; text-align:center; background:#fff0f6; padding:25px; border-radius:20px;">
+  <h2 style="color:#d63384;">📸 Dodaj zdjęcia i filmiki</h2>
+  <p style="color:#777;">Podziel się wspomnieniami z wieczoru Ani 💕</p>
 
+  <input 
+    type="file" 
+    id="fileInput" 
+    accept="image/*,video/*" 
+    multiple
+  >
+
+  <br><br>
+
+  <button 
+    onclick="uploadFiles()"
+    style="
+      background:#d63384;
+      color:white;
+      border:none;
+      padding:12px 25px;
+      border-radius:25px;
+      font-size:16px;
+      cursor:pointer;
+    "
+  >
+    💗 Dodaj do albumu
+  </button>
+
+  <p id="status"></p>
+</div>
+
+<script>
+async function uploadFiles() {
+  const files = document.getElementById('fileInput').files;
+  const status = document.getElementById('status');
+
+  if (!files.length) {
+    status.innerHTML = "Wybierz najpierw zdjęcia 💕";
+    return;
+  }
+
+  status.innerHTML = "Dodaję zdjęcia... 🌸";
+
+  for (const file of files) {
+    const fileName = Date.now() + "-" + file.name;
+
+    const response = await fetch(
+      "TU_BEDZIE_POLACZENIE_Z_SUPABASE",
+      {
+        method: "POST",
+        body: file
+      }
+    );
+  }
+
+  status.innerHTML = "Gotowe! 🎉";
+}
+</script>
 </body>
 </html>
