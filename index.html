@@ -125,6 +125,12 @@
 
 <script>
 <script>
+<script>
+const supabaseClient = supabase.createClient(
+  "TUTAJ_WKLEIMY_API_URL",
+  "TUTAJ_WKLEIMY_ANON_KEY"
+);
+
 async function uploadFiles() {
   const files = document.getElementById('fileInput').files;
   const status = document.getElementById('status');
@@ -139,19 +145,12 @@ async function uploadFiles() {
   for (const file of files) {
     const fileName = Date.now() + "-" + file.name;
 
-    const upload = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/zdjecia-ani/${fileName}`,
-      {
-        method: "POST",
-        headers: {
-          "Authorization": "Bearer " + process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-          "Content-Type": file.type
-        },
-        body: file
-      }
-    );
+    const { error } = await supabaseClient.storage
+      .from("zdjecia-ani")
+      .upload(fileName, file);
 
-    if (!upload.ok) {
+    if (error) {
+      console.log(error);
       status.innerHTML = "Ups, coś nie wyszło 😢";
       return;
     }
@@ -159,6 +158,7 @@ async function uploadFiles() {
 
   status.innerHTML = "Gotowe! Zdjęcia są w albumie Ani 💗";
 }
+</script>
 </script>
 </script>
 </body>
