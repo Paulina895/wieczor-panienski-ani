@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -123,6 +124,7 @@
 </div>
 
 <script>
+<script>
 async function uploadFiles() {
   const files = document.getElementById('fileInput').files;
   const status = document.getElementById('status');
@@ -137,17 +139,27 @@ async function uploadFiles() {
   for (const file of files) {
     const fileName = Date.now() + "-" + file.name;
 
-    const response = await fetch(
-      "TU_BEDZIE_POLACZENIE_Z_SUPABASE",
+    const upload = await fetch(
+      `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/zdjecia-ani/${fileName}`,
       {
         method: "POST",
+        headers: {
+          "Authorization": "Bearer " + process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+          "Content-Type": file.type
+        },
         body: file
       }
     );
+
+    if (!upload.ok) {
+      status.innerHTML = "Ups, coś nie wyszło 😢";
+      return;
+    }
   }
 
-  status.innerHTML = "Gotowe! 🎉";
+  status.innerHTML = "Gotowe! Zdjęcia są w albumie Ani 💗";
 }
+</script>
 </script>
 </body>
 </html>
