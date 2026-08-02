@@ -7,6 +7,7 @@
 <title>Wieczór Panieński Ani 💗</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js"></script>
 
 <style>
 body {
@@ -116,14 +117,40 @@ status.innerHTML = "Wysyłam zdjęcia... 🌸";
 
 for (const file of files) {
 
+let uploadFile = file;
+let fileName = Date.now() + "-" + file.name;
 
-const fileName = Date.now() + "-" + file.name;
 
+// zamiana HEIC na JPG
+if (file.name.toLowerCase().endsWith(".heic")) {
+
+status.innerHTML = "Przygotowuję zdjęcie z iPhone'a... 📸";
+
+const converted = await heic2any({
+blob: file,
+toType: "image/jpeg",
+quality: 0.8
+});
+
+uploadFile = new File(
+[converted],
+file.name.replace(/\.heic$/i, ".jpg"),
+{
+type: "image/jpeg"
+}
+);
+
+fileName = Date.now() + "-" + uploadFile.name;
+
+}
+
+
+// wysyłanie do Supabase
 
 const { error } = await supabaseClient
 .storage
 .from("zdjecia-ani")
-.upload(fileName, file);
+.upload(fileName, uploadFile);
 
 
 if (error) {
@@ -141,9 +168,9 @@ return;
 
 status.innerHTML = "Gotowe! Zdjęcia Ani są zapisane 💗";
 
+loadGallery();
 
 }
-async function loadGallery() {
   
 console.log("Galeria startuje");
   
