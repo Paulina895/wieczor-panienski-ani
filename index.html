@@ -117,14 +117,43 @@ status.innerHTML = "Wysyłam zdjęcia... 🌸";
 
 for (const file of files) {
 
+let uploadFile = file;
+let fileName = Date.now() + "-" + file.name;
 
-const fileName = Date.now() + "-" + file.name;
 
+// jeśli zdjęcie jest z iPhone'a w formacie HEIC
+if (file.name.toLowerCase().endsWith(".heic")) {
+
+status.innerHTML = "Przygotowuję zdjęcie z iPhone'a... 📸";
+
+
+const convertedBlob = await heic2any({
+blob: file,
+toType: "image/jpeg",
+quality: 0.8
+});
+
+
+uploadFile = new File(
+[convertedBlob],
+file.name.replace(/\.heic$/i, ".jpg"),
+{
+type: "image/jpeg"
+}
+);
+
+
+fileName = Date.now() + "-" + uploadFile.name;
+
+}
+
+
+// wysłanie do Supabase
 
 const { error } = await supabaseClient
 .storage
 .from("zdjecia-ani")
-.upload(fileName, file);
+.upload(fileName, uploadFile);
 
 
 if (error) {
@@ -142,6 +171,7 @@ return;
 
 status.innerHTML = "Gotowe! Zdjęcia Ani są zapisane 💗";
 
+loadGallery();
 
 }
 async function loadGallery() {
